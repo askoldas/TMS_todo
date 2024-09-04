@@ -13269,4 +13269,14 @@ textarea.form-control-lg {
   margin-left: 10px;
   font-size: .8rem;
 }
+
+@media (width <= 768px) {
+  .todo-status-container {
+    flex-direction: column;
+  }
+
+  .todo-status-block {
+    margin-bottom: 16px;
+  }
+}
 /*# sourceMappingURL=index.fcb3f8e3.css.map */

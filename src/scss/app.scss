@@ -5,7 +5,6 @@
 
 // Components
 
-
 .todo-item.todo {
     background-color: #d5e8d4; 
 }
@@ -17,7 +16,6 @@
 .todo-item.done {
     background-color: #f5f5f5; 
 }
-
 
 .todo-container {
     display: flex;
@@ -87,4 +85,14 @@
 .todo-item .actions button {
     margin-left: 10px;
     font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+    .todo-status-container {
+        flex-direction: column;
+    }
+
+    .todo-status-block {
+        margin-bottom: 16px; 
+    }
 }
