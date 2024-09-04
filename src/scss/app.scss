@@ -5,6 +5,86 @@
 
 // Components
 
-h1 {
-    color: red;
+
+.todo-item.todo {
+    background-color: #d5e8d4; 
+}
+
+.todo-item.in-progress {
+    background-color: #dae8fc; 
+}
+
+.todo-item.done {
+    background-color: #f5f5f5; 
+}
+
+
+.todo-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 80px auto;
+    padding: 20px;
+    background-color: lightgray;
+    border-radius: 10px;
+}
+
+.todo-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    align-items: center;
+}
+
+#clock {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.todo-status-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px; 
+}
+
+.todo-status-block {
+    flex: 1;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    min-height: 300px;
+}
+
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.todo-placeholder {
+    min-height: 200px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.todo-item {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.todo-item .actions {
+    display: flex;
+    justify-content: flex-end; 
+    margin-bottom: 5px;
+}
+
+.todo-item .actions button {
+    margin-left: 10px;
+    font-size: 0.8rem;
 }
