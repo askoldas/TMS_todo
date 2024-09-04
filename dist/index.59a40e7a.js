@@ -586,6 +586,17 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 },{}],"8lRBv":[function(require,module,exports) {
 var _bootstrap = require("bootstrap");
 console.log("check");
+// CLOCK
+const clockElement = document.getElementById("clock");
+function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
 
 },{"bootstrap":"h36JB"}],"h36JB":[function(require,module,exports) {
 /*!
