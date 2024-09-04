@@ -8,27 +8,69 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>START</h1>
-    <button type="button" class="btn btn-primary">Primary</button>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-        Launch static backdrop modal
-      </button>
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              ...
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Understood</button>
-            </div>
-          </div>
-        </div>
+  <div class="todo-container">
+      <div class="todo-header">
+          <h1>Trello</h1>
+          <div id="clock">12:34:56</div>
       </div>
+
+      <div class="todo-status-container">
+          <div class="todo-status-block" id="todo">
+              <div class="status-header">
+                  <h2>Todo</h2>
+                  <span class="todo-counter">1</span>
+              </div>
+              <div class="todo-placeholder todo-todo">
+                  <div class="todo-item todo">
+                      <div class="actions">
+                          <button class="btn btn-sm btn-info">Edit</button>
+                          <button class="btn btn-sm btn-danger">Delete</button>
+                      </div>
+                      <h5>Lorem Ipsum Todo</h5>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                      <span class="todo-date">12/09/2024</span>
+                  </div>
+              </div>
+              <button class="btn btn-primary btn-block mt-3">Add Todo</button>
+          </div>
+
+          <div class="todo-status-block" id="in-progress">
+              <div class="status-header">
+                  <h2>In Progress</h2>
+                  <span class="in-progress-counter">1</span>
+              </div>
+              <div class="todo-placeholder todo-in-progress">
+                  <div class="todo-item in-progress">
+                      <div class="actions">
+                          <button class="btn btn-sm btn-info">Edit</button>
+                          <button class="btn btn-sm btn-danger">Delete</button>
+                      </div>
+                      <h5>Lorem Ipsum In Progress</h5>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                      <span class="todo-date">12/09/2024</span>
+                  </div>
+              </div>
+          </div>
+
+          <div class="todo-status-block" id="done">
+              <div class="status-header">
+                  <h2>Done</h2>
+                  <span class="done-counter">1</span>
+              </div>
+              <div class="todo-placeholder todo-done">
+                  <div class="todo-item done">
+                      <div class="actions">
+                          <button class="btn btn-sm btn-info">Edit</button>
+                          <button class="btn btn-sm btn-danger">Delete</button>
+                      </div>
+                      <h5>Lorem Ipsum Done</h5>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                      <span class="todo-date">12/09/2024</span>
+                  </div>
+              </div>
+              <button class="btn btn-danger btn-block mt-3">Clear Done</button>
+          </div>
+      </div>
+  </div>
 </body>
 </html>
