@@ -621,9 +621,7 @@ addTodoButton.addEventListener("click", handleOpenModalForAdd);
 saveTodoButton.addEventListener("click", handleSaveNewTodo);
 saveEditTodoButton.addEventListener("click", handleSaveEditTodo);
 confirmDeleteTodoButton.addEventListener("click", handleConfirmDeleteTodo);
-clearCompletedButton.addEventListener("click", ()=>{
-    clearCompletedModal.show();
-});
+clearCompletedButton.addEventListener("click", handleClearCompletedButtonClick);
 confirmClearCompletedButton.addEventListener("click", handleConfirmClearCompleted);
 // Handlers
 function handleOpenModalForAdd() {
@@ -639,6 +637,9 @@ function handleOpenEditModal(todo) {
 function handleOpenDeleteModal(todoId) {
     currentDeleteId = todoId;
     deleteTodoModal.show();
+}
+function handleClearCompletedButtonClick() {
+    clearCompletedModal.show();
 }
 function handleSaveNewTodo() {
     const title = todoInputTitle.value.trim();
@@ -683,15 +684,6 @@ function handleConfirmClearCompleted() {
     renderTodos();
     clearCompletedModal.hide();
 }
-// Change status 
-function changeTodoStatus(id, newStatus) {
-    data = data.map((todo)=>{
-        if (todo.id === id) todo.status = newStatus;
-        return todo;
-    });
-    setData(data);
-    renderTodos();
-}
 // Functions
 function TodoItem(title, description) {
     this.id = crypto.randomUUID();
@@ -713,14 +705,24 @@ function renderTodos() {
     doneContainer.innerHTML = "";
     data.forEach((todo)=>{
         const todoElement = buildTodoElement(todo);
-        if (todo.status === "todo") todoContainer.appendChild(todoElement);
-        else if (todo.status === "in-progress") inProgressContainer.appendChild(todoElement);
-        else if (todo.status === "done") doneContainer.appendChild(todoElement);
+        appendTodoToContainer(todo, todoElement);
     });
-    attachEventListenersToRadioButtons();
     (0, _countersJs.updateCounters)(data);
 }
-// Build the HTML 
+function appendTodoToContainer(todo, todoElement) {
+    if (todo.status === "todo") todoContainer.append(todoElement);
+    else if (todo.status === "in-progress") inProgressContainer.append(todoElement);
+    else if (todo.status === "done") doneContainer.append(todoElement);
+}
+function changeTodoStatus(id, newStatus) {
+    data = data.map((todo)=>{
+        if (todo.id === id) todo.status = newStatus;
+        return todo;
+    });
+    setData(data);
+    renderTodos();
+}
+// Build Todo
 function buildTodoElement(todo) {
     const div = document.createElement("div");
     div.classList.add("todo-item", todo.status);
@@ -745,21 +747,16 @@ function buildTodoElement(todo) {
         </div>
         <span class="todo-date">${todo.createdAt}</span>
     `;
-    // Attach edit and delete event listeners
     div.querySelector(".edit-btn").addEventListener("click", ()=>handleOpenEditModal(todo));
     div.querySelector(".delete-btn").addEventListener("click", ()=>handleOpenDeleteModal(todo.id));
-    return div;
-}
-// Attach event listeners to the radio buttons
-function attachEventListenersToRadioButtons() {
-    const radioButtons = document.querySelectorAll('input[type="radio"]');
+    const radioButtons = div.querySelectorAll('input[type="radio"]');
     radioButtons.forEach((radio)=>{
         radio.addEventListener("change", function() {
-            const todoId = this.closest(".todo-item").getAttribute("data-id");
             const newStatus = this.value;
-            changeTodoStatus(todoId, newStatus);
+            changeTodoStatus(todo.id, newStatus);
         });
     });
+    return div;
 }
 // Helper functions 
 function populateEditModalFields(todo) {
@@ -776,13 +773,15 @@ function clearEditModalFields() {
 }
 // Initial Render
 renderTodos();
+// Clock
+setInterval((0, _clockJs.clock), 1000);
+(0, _clockJs.clock)();
 
 },{"./counters.js":"cAZor","./clock.js":"4sKTc","bootstrap":"h36JB"}],"cAZor":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "updateCounters", ()=>updateCounters);
 function updateCounters(todos) {
-    console.log(todos);
     const todoCount = todos.filter((todo)=>todo.status === "todo").length;
     const inProgressCount = todos.filter((todo)=>todo.status === "in-progress").length;
     const doneCount = todos.filter((todo)=>todo.status === "done").length;
@@ -834,8 +833,6 @@ function clock() {
     const seconds = String(now.getSeconds()).padStart(2, "0");
     clockElement.textContent = `${hours}:${minutes}:${seconds}`;
 }
-setInterval(clock, 1000);
-clock();
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h36JB":[function(require,module,exports) {
 /*!

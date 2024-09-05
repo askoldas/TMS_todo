@@ -34,20 +34,16 @@ let currentDeleteId = null
 // Clear Completed
 const clearCompletedButton = document.querySelector('.clear-completed')
 const clearCompletedModalElement = document.getElementById('clearCompletedModal')
-const clearCompletedModal = new Modal(clearCompletedModalElement);
+const clearCompletedModal = new Modal(clearCompletedModalElement)
 const confirmClearCompletedButton = document.querySelector('.confirm-clear-completed')
-
 
 // Listeners
 addTodoButton.addEventListener('click', handleOpenModalForAdd)
 saveTodoButton.addEventListener('click', handleSaveNewTodo)
 saveEditTodoButton.addEventListener('click', handleSaveEditTodo)
 confirmDeleteTodoButton.addEventListener('click', handleConfirmDeleteTodo)
-clearCompletedButton.addEventListener('click', () => {
-    clearCompletedModal.show() 
-})
+clearCompletedButton.addEventListener('click', handleClearCompletedButtonClick)
 confirmClearCompletedButton.addEventListener('click', handleConfirmClearCompleted)
-
 
 // Handlers
 
@@ -66,6 +62,10 @@ function handleOpenEditModal(todo) {
 function handleOpenDeleteModal(todoId) {
     currentDeleteId = todoId
     deleteTodoModal.show()
+}
+
+function handleClearCompletedButtonClick() {
+    clearCompletedModal.show()
 }
 
 function handleSaveNewTodo() {
@@ -125,19 +125,6 @@ function handleConfirmClearCompleted() {
     clearCompletedModal.hide()
 }
 
-// Change status 
-function changeTodoStatus(id, newStatus) {
-    data = data.map(todo => {
-        if (todo.id === id) {
-            todo.status = newStatus
-        }
-        return todo
-    })
-
-    setData(data)
-    renderTodos()
-}
-
 // Functions
 
 function TodoItem(title, description) {
@@ -164,23 +151,35 @@ function renderTodos() {
 
     data.forEach(todo => {
         const todoElement = buildTodoElement(todo)
-
-        if (todo.status === 'todo') {
-            todoContainer.appendChild(todoElement)
-        } else if (todo.status === 'in-progress') {
-            inProgressContainer.appendChild(todoElement)
-        } else if (todo.status === 'done') {
-            doneContainer.appendChild(todoElement)
-        }
+        appendTodoToContainer(todo, todoElement)
     })
-
-    
-    attachEventListenersToRadioButtons()
 
     updateCounters(data)
 }
 
-// Build the HTML 
+function appendTodoToContainer(todo, todoElement) {
+    if (todo.status === 'todo') {
+        todoContainer.append(todoElement)
+    } else if (todo.status === 'in-progress') {
+        inProgressContainer.append(todoElement)
+    } else if (todo.status === 'done') {
+        doneContainer.append(todoElement)
+    }
+}
+
+function changeTodoStatus(id, newStatus) {
+    data = data.map(todo => {
+        if (todo.id === id) {
+            todo.status = newStatus
+        }
+        return todo
+    })
+
+    setData(data)
+    renderTodos()
+}
+
+// Build Todo
 function buildTodoElement(todo) {
     const div = document.createElement('div')
     div.classList.add('todo-item', todo.status)
@@ -207,24 +206,18 @@ function buildTodoElement(todo) {
         <span class="todo-date">${todo.createdAt}</span>
     `
 
-    // Attach edit and delete event listeners
     div.querySelector('.edit-btn').addEventListener('click', () => handleOpenEditModal(todo))
     div.querySelector('.delete-btn').addEventListener('click', () => handleOpenDeleteModal(todo.id))
 
-    return div
-}
-
-// Attach event listeners to the radio buttons
-function attachEventListenersToRadioButtons() {
-    const radioButtons = document.querySelectorAll('input[type="radio"]')
-
+    const radioButtons = div.querySelectorAll('input[type="radio"]')
     radioButtons.forEach(radio => {
         radio.addEventListener('change', function () {
-            const todoId = this.closest('.todo-item').getAttribute('data-id')
             const newStatus = this.value
-            changeTodoStatus(todoId, newStatus)
+            changeTodoStatus(todo.id, newStatus)
         })
     })
+
+    return div
 }
 
 // Helper functions 
@@ -245,3 +238,7 @@ function clearEditModalFields() {
 
 // Initial Render
 renderTodos()
+
+// Clock
+setInterval(clock, 1000)
+clock()

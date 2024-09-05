@@ -1,5 +1,4 @@
 export function updateCounters(todos) {
-    console.log(todos)
 
     const todoCount = todos.filter(todo => todo.status === 'todo').length
     const inProgressCount = todos.filter(todo => todo.status === 'in-progress').length
