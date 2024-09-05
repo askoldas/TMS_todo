@@ -586,6 +586,7 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 },{}],"8lRBv":[function(require,module,exports) {
 var _bootstrap = require("bootstrap");
 var _clockJs = require("./clock.js");
+var _countersJs = require("./counters.js");
 // Variables
 let data = getData();
 const addTodoButton = document.querySelector(".add-todo");
@@ -641,6 +642,7 @@ function handleSaveNewTodo() {
         todoInputTitle.value = "";
         todoInputDescription.value = "";
         addTodoModal.hide();
+        (0, _countersJs.updateCounters)(data);
     } else alert("Please fill in both the title and description!");
 }
 function handleSaveEditTodo() {
@@ -691,22 +693,19 @@ function setData(data) {
     localStorage.setItem("todos", JSON.stringify(data));
 }
 function renderTodos() {
-    // Clear containers before re-rendering
     todoContainer.innerHTML = "";
     inProgressContainer.innerHTML = "";
     doneContainer.innerHTML = "";
-    // Render todos into their respective containers based on status
     data.forEach((todo)=>{
         const todoElement = buildTodoElement(todo);
-        // Append todos to their respective containers
         if (todo.status === "todo") todoContainer.appendChild(todoElement);
         else if (todo.status === "in-progress") inProgressContainer.appendChild(todoElement);
         else if (todo.status === "done") doneContainer.appendChild(todoElement);
     });
-    // Attach event listeners to the dynamically created radio buttons
     attachEventListenersToRadioButtons();
+    (0, _countersJs.updateCounters)(data);
 }
-// Build the HTML structure for a todo item
+// Build the HTML 
 function buildTodoElement(todo) {
     const div = document.createElement("div");
     div.classList.add("todo-item", todo.status);
@@ -747,7 +746,7 @@ function attachEventListenersToRadioButtons() {
         });
     });
 }
-// Helper functions for modal field handling
+// Helper functions 
 function populateEditModalFields(todo) {
     editTodoInputTitle.value = todo.title;
     editTodoInputDescription.value = todo.description;
@@ -760,10 +759,10 @@ function clearEditModalFields() {
     editTodoInputTitle.value = "";
     editTodoInputDescription.value = "";
 }
-// Render the todos when the app is first loaded
+// Initial Render
 renderTodos();
 
-},{"bootstrap":"h36JB","./clock.js":"4sKTc"}],"h36JB":[function(require,module,exports) {
+},{"bootstrap":"h36JB","./clock.js":"4sKTc","./counters.js":"cAZor"}],"h36JB":[function(require,module,exports) {
 /*!
   * Bootstrap v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -6449,6 +6448,20 @@ function clock() {
 }
 setInterval(clock, 1000);
 clock();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cAZor":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "updateCounters", ()=>updateCounters);
+function updateCounters(todos) {
+    console.log(todos);
+    const todoCount = todos.filter((todo)=>todo.status === "todo").length;
+    const inProgressCount = todos.filter((todo)=>todo.status === "in-progress").length;
+    const doneCount = todos.filter((todo)=>todo.status === "done").length;
+    document.querySelector(".todo-counter").textContent = todoCount;
+    document.querySelector(".in-progress-counter").textContent = inProgressCount;
+    document.querySelector(".done-counter").textContent = doneCount;
+}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["aP7aF","8lRBv"], "8lRBv", "parcelRequire08b6")
 
