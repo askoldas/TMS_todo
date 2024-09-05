@@ -13270,6 +13270,10 @@ textarea.form-control-lg {
   font-size: .8rem;
 }
 
+.clear-completed {
+  float: right;
+}
+
 @media (width <= 768px) {
   .todo-status-container {
     flex-direction: column;
