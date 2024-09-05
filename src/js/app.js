@@ -1,5 +1,6 @@
 import { Modal } from 'bootstrap'
 import { clock } from './clock.js'
+import { updateCounters } from './counters.js'
 
 // Variables
 let data = getData()
@@ -30,11 +31,13 @@ const confirmDeleteTodoButton = document.querySelector('.confirm-delete-todo')
 let currentEditId = null
 let currentDeleteId = null
 
+
 // Listeners
 addTodoButton.addEventListener('click', handleOpenModalForAdd)
 saveTodoButton.addEventListener('click', handleSaveNewTodo)
 saveEditTodoButton.addEventListener('click', handleSaveEditTodo)
 confirmDeleteTodoButton.addEventListener('click', handleConfirmDeleteTodo)
+
 
 // Handlers
 
@@ -68,6 +71,8 @@ function handleSaveNewTodo() {
         todoInputTitle.value = ''
         todoInputDescription.value = ''
         addTodoModal.hide()
+
+        updateCounters(data)
     } else {
         alert('Please fill in both the title and description!')
     }
@@ -136,16 +141,13 @@ function setData(data) {
 }
 
 function renderTodos() {
-    // Clear containers before re-rendering
     todoContainer.innerHTML = ''
     inProgressContainer.innerHTML = ''
     doneContainer.innerHTML = ''
 
-    // Render todos into their respective containers based on status
     data.forEach(todo => {
         const todoElement = buildTodoElement(todo)
 
-        // Append todos to their respective containers
         if (todo.status === 'todo') {
             todoContainer.appendChild(todoElement)
         } else if (todo.status === 'in-progress') {
@@ -155,11 +157,13 @@ function renderTodos() {
         }
     })
 
-    // Attach event listeners to the dynamically created radio buttons
+    
     attachEventListenersToRadioButtons()
+
+    updateCounters(data)
 }
 
-// Build the HTML structure for a todo item
+// Build the HTML 
 function buildTodoElement(todo) {
     const div = document.createElement('div')
     div.classList.add('todo-item', todo.status)
@@ -206,7 +210,7 @@ function attachEventListenersToRadioButtons() {
     })
 }
 
-// Helper functions for modal field handling
+// Helper functions 
 function populateEditModalFields(todo) {
     editTodoInputTitle.value = todo.title
     editTodoInputDescription.value = todo.description
@@ -222,5 +226,5 @@ function clearEditModalFields() {
     editTodoInputDescription.value = ''
 }
 
-// Render the todos when the app is first loaded
+// Initial Render
 renderTodos()
