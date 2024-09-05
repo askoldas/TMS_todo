@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,133 +8,120 @@
     <script src="/index.59a40e7a.js" defer=""></script>
     <title>Todo App</title>
 </head>
+
 <body>
-  <div class="todo-container">
-      <div class="todo-header">
-          <h1>Todo App</h1>
-          <div id="clock"></div>
-      </div>
+    <div class="todo-container">
+        <div class="todo-header">
+            <h1>Todo App</h1>
+            <div id="clock"></div>
+        </div>
 
-      <div class="todo-status-container">
-          <div class="todo-status-block" id="todo">
-              <div class="status-header">
-                  <h2>Todo</h2>
-                  <span class="todo-counter">1</span>
-              </div>
-              <div class="todo-placeholder todo-todo">
-                  <div class="todo-item todo">
-                      <div class="actions">
-                          <button class="btn btn-sm btn-info">Edit</button>
-                          <button class="btn btn-sm btn-danger">Delete</button>
-                      </div>
-                      <h5>Lorem Ipsum Todo</h5>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                      <div>
-                          <label>
-                              <input type="radio" name="status-todo" checked=""> Todo
-                          </label>
-                          <label>
-                              <input type="radio" name="status-todo"> In Progress
-                          </label>
-                          <label>
-                              <input type="radio" name="status-todo"> Done
-                          </label>
-                      </div>
-                      <span class="todo-date">12/09/2024</span>
-                  </div>
-              </div>
-              <button class="btn btn-primary btn-block mt-3 add-todo">Add Todo</button>
-          </div>
+        <div class="todo-status-container">
+            <div class="todo-status-block" id="todo">
+                <div class="status-header">
+                    <h2>Todo</h2>
+                    <span class="todo-counter">1</span>
+                </div>
+                <div class="todo-placeholder todo-todo"></div>
+                <button class="btn btn-primary btn-block mt-3 add-todo">Add Todo</button>
+            </div>
 
-          <div class="todo-status-block" id="in-progress">
-              <div class="status-header">
-                  <h2>In Progress</h2>
-                  <span class="in-progress-counter">1</span>
-              </div>
-              <div class="todo-placeholder todo-in-progress">
-                  <div class="todo-item in-progress">
-                      <div class="actions">
-                          <button class="btn btn-sm btn-info">Edit</button>
-                          <button class="btn btn-sm btn-danger">Delete</button>
-                      </div>
-                      <h5>Lorem Ipsum In Progress</h5>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                      <div>
-                          <label>
-                              <input type="radio" name="status-in-progress"> Todo
-                          </label>
-                          <label>
-                              <input type="radio" name="status-in-progress" checked=""> In Progress
-                          </label>
-                          <label>
-                              <input type="radio" name="status-in-progress"> Done
-                          </label>
-                      </div>
-                      <span class="todo-date">12/09/2024</span>
-                  </div>
-              </div>
-          </div>
+            <div class="todo-status-block" id="in-progress">
+                <div class="status-header">
+                    <h2>In Progress</h2>
+                    <span class="in-progress-counter">1</span>
+                </div>
+                <div class="todo-placeholder todo-in-progress"></div>
+            </div>
 
-          <div class="todo-status-block" id="done">
-              <div class="status-header">
-                  <h2>Done</h2>
-                  <span class="done-counter">1</span>
-              </div>
-              <div class="todo-placeholder todo-done">
-                  <div class="todo-item done">
-                      <div class="actions">
-                          <button class="btn btn-sm btn-info">Edit</button>
-                          <button class="btn btn-sm btn-danger">Delete</button>
-                      </div>
-                      <h5>Lorem Ipsum Done</h5>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                      <div>
-                          <label>
-                              <input type="radio" name="status-done"> Todo
-                          </label>
-                          <label>
-                              <input type="radio" name="status-done"> In Progress
-                          </label>
-                          <label>
-                              <input type="radio" name="status-done" checked=""> Done
-                          </label>
-                      </div>
-                      <span class="todo-date">12/09/2024</span>
-                  </div>
-              </div>
-              <button class="btn btn-danger btn-block mt-3">Clear Done</button>
-          </div>
-      </div>
+            <div class="todo-status-block" id="done">
+                <div class="status-header">
+                    <h2>Done</h2>
+                    <span class="done-counter">1</span>
+                </div>
+                <div class="todo-placeholder todo-done"></div>
+            </div>
+        </div>
 
-      <!-- Modal add todos -->
-       
-<div class="modal fade" id="addTodoModal" tabindex="-1" aria-labelledby="addTodoModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="addTodoModalLabel">Add Todo</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <div class="form-group">
-                  <label for="todo-title">Title</label>
-                  <input type="text" class="form-control" id="todo-title" placeholder="Enter title">
-              </div>
-              <div class="form-group">
-                  <label for="todo-description">Description</label>
-                  <textarea class="form-control" id="todo-description" rows="3" placeholder="Enter description"></textarea>
-              </div>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-primary save-todo">Save</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-      </div>
-  </div>
-</div>
     </div>
 
-  
+    <!-- Modal add todos -->
+
+    <div class="modal fade" id="addTodoModal" tabindex="-1" aria-labelledby="addTodoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTodoModalLabel">Add Todo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="todo-title">Title</label>
+                        <input type="text" class="form-control" id="todo-title" placeholder="Enter title">
+                    </div>
+                    <div class="form-group">
+                        <label for="todo-description">Description</label>
+                        <textarea class="form-control" id="todo-description" rows="3" placeholder="Enter description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary save-todo">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal edit todos -->
+    <div class="modal fade" id="editTodoModal" tabindex="-1" aria-labelledby="editTodoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTodoModalLabel">Edit Todo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="edit-todo-title">Title</label>
+                        <input type="text" class="form-control" id="edit-todo-title" placeholder="Enter title">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-todo-description">Description</label>
+                        <textarea class="form-control" id="edit-todo-description" rows="3" placeholder="Enter description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary save-edit-todo">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal delete todos -->
+    <div class="modal fade" id="deleteTodoModal" tabindex="-1" aria-labelledby="deleteTodoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteTodoModalLabel">Delete Todo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this todo?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger confirm-delete-todo">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    
+
+    
 </body>
 
 
