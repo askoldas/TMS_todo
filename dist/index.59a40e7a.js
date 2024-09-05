@@ -611,11 +611,20 @@ const confirmDeleteTodoButton = document.querySelector(".confirm-delete-todo");
 // Variable to track the ID of the todo
 let currentEditId = null;
 let currentDeleteId = null;
+// Clear Completed
+const clearCompletedButton = document.querySelector(".clear-completed");
+const clearCompletedModalElement = document.getElementById("clearCompletedModal");
+const clearCompletedModal = new (0, _bootstrap.Modal)(clearCompletedModalElement);
+const confirmClearCompletedButton = document.querySelector(".confirm-clear-completed");
 // Listeners
 addTodoButton.addEventListener("click", handleOpenModalForAdd);
 saveTodoButton.addEventListener("click", handleSaveNewTodo);
 saveEditTodoButton.addEventListener("click", handleSaveEditTodo);
 confirmDeleteTodoButton.addEventListener("click", handleConfirmDeleteTodo);
+clearCompletedButton.addEventListener("click", ()=>{
+    clearCompletedModal.show();
+});
+confirmClearCompletedButton.addEventListener("click", handleConfirmClearCompleted);
 // Handlers
 function handleOpenModalForAdd() {
     currentEditId = null;
@@ -667,6 +676,12 @@ function handleConfirmDeleteTodo() {
     setData(data);
     renderTodos();
     deleteTodoModal.hide();
+}
+function handleConfirmClearCompleted() {
+    data = data.filter((todo)=>todo.status !== "done");
+    setData(data);
+    renderTodos();
+    clearCompletedModal.hide();
 }
 // Change status 
 function changeTodoStatus(id, newStatus) {

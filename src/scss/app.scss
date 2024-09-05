@@ -87,6 +87,10 @@
     font-size: 0.8rem;
 }
 
+.clear-completed {
+    float: right;
+}
+
 @media (max-width: 768px) {
     .todo-status-container {
         flex-direction: column;
