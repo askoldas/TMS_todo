@@ -130,10 +130,7 @@ function handleConfirmClearCompleted() {
 
 // Functions
 
-
-
 function renderTodos() {
-
     clearTodoContainers()
 
     data.forEach(todo => {
@@ -150,7 +147,6 @@ function renderTodos() {
 
     updateCounters(data)
 }
-
 
 function changeTodoStatus(id, newStatus) {
     data = data.map(todo => {
@@ -170,6 +166,7 @@ function buildTodoElement(todo) {
     div.classList.add('todo-item', todo.status)
     div.setAttribute('data-id', todo.id)
 
+    // Corrected template literal usage
     div.innerHTML = `
         <div class="actions">
             <button class="btn btn-sm btn-info edit-btn">Edit</button>

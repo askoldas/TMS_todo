@@ -709,6 +709,7 @@ function buildTodoElement(todo) {
     const div = document.createElement("div");
     div.classList.add("todo-item", todo.status);
     div.setAttribute("data-id", todo.id);
+    // Corrected template literal usage
     div.innerHTML = `
         <div class="actions">
             <button class="btn btn-sm btn-info edit-btn">Edit</button>
@@ -754,66 +755,7 @@ function clearTodoContainers() {
 // Initial Render
 renderTodos();
 
-},{"./counters.js":"cAZor","./clock.js":"4sKTc","bootstrap":"h36JB","./data.js":"kq51T","./constructors.js":"6rewt"}],"cAZor":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "updateCounters", ()=>updateCounters);
-function updateCounters(todos) {
-    const todoCount = todos.filter((todo)=>todo.status === "todo").length;
-    const inProgressCount = todos.filter((todo)=>todo.status === "in-progress").length;
-    const doneCount = todos.filter((todo)=>todo.status === "done").length;
-    document.querySelector(".todo-counter").textContent = todoCount;
-    document.querySelector(".in-progress-counter").textContent = inProgressCount;
-    document.querySelector(".done-counter").textContent = doneCount;
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"4sKTc":[function(require,module,exports) {
-// CLOCK
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "clock", ()=>clock);
-const clockElement = document.getElementById("clock");
-function clock() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-    clockElement.textContent = `${hours}:${minutes}:${seconds}`;
-}
-setInterval(clock, 1000);
-clock();
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h36JB":[function(require,module,exports) {
+},{"bootstrap":"h36JB","./clock.js":"4sKTc","./counters.js":"cAZor","./data.js":"kq51T","./constructors.js":"6rewt"}],"h36JB":[function(require,module,exports) {
 /*!
   * Bootstrap v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -4531,7 +4473,37 @@ var modifierPhases = [
     afterWrite
 ];
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cap3W":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"cap3W":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "applyStyles", ()=>(0, _applyStylesJsDefault.default));
@@ -6454,7 +6426,36 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     defaultModifiers: defaultModifiers
 }); // eslint-disable-next-line import/no-unused-modules
 
-},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kq51T":[function(require,module,exports) {
+},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4sKTc":[function(require,module,exports) {
+// CLOCK
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "clock", ()=>clock);
+const clockElement = document.getElementById("clock");
+function clock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+}
+setInterval(clock, 1000);
+clock();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cAZor":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "updateCounters", ()=>updateCounters);
+function updateCounters(todos) {
+    const todoCount = todos.filter((todo)=>todo.status === "todo").length;
+    const inProgressCount = todos.filter((todo)=>todo.status === "in-progress").length;
+    const doneCount = todos.filter((todo)=>todo.status === "done").length;
+    document.querySelector(".todo-counter").textContent = todoCount;
+    document.querySelector(".in-progress-counter").textContent = inProgressCount;
+    document.querySelector(".done-counter").textContent = doneCount;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kq51T":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getData", ()=>getData);
