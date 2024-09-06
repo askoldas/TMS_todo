@@ -587,8 +587,10 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var _bootstrap = require("bootstrap");
 var _clockJs = require("./clock.js");
 var _countersJs = require("./counters.js");
+var _renderJs = require("./render.js");
+var _dataJs = require("./data.js");
 // Variables
-let data = getData();
+let data = (0, _dataJs.getData)();
 const addTodoButton = document.querySelector(".add-todo");
 const saveTodoButton = document.querySelector(".save-todo");
 const todoInputTitle = document.getElementById("todo-title");
@@ -647,8 +649,8 @@ function handleSaveNewTodo() {
     if (title && description) {
         const newTodo = new TodoItem(title, description);
         data.push(newTodo);
-        setData(data);
-        renderTodos();
+        (0, _dataJs.setData)(data);
+        (0, _renderJs.renderTodos)();
         todoInputTitle.value = "";
         todoInputDescription.value = "";
         addTodoModal.hide();
@@ -666,22 +668,22 @@ function handleSaveEditTodo() {
             }
             return todo;
         });
-        setData(data);
-        renderTodos();
+        (0, _dataJs.setData)(data);
+        (0, _renderJs.renderTodos)();
         clearEditModalFields();
         editTodoModal.hide();
     } else alert("Please fill in both the title and description!");
 }
 function handleConfirmDeleteTodo() {
     data = data.filter((todo)=>todo.id !== currentDeleteId);
-    setData(data);
-    renderTodos();
+    (0, _dataJs.setData)(data);
+    (0, _renderJs.renderTodos)();
     deleteTodoModal.hide();
 }
 function handleConfirmClearCompleted() {
     data = data.filter((todo)=>todo.status !== "done");
-    setData(data);
-    renderTodos();
+    (0, _dataJs.setData)(data);
+    (0, _renderJs.renderTodos)();
     clearCompletedModal.hide();
 }
 // Functions
@@ -692,35 +694,13 @@ function TodoItem(title, description) {
     this.status = "todo";
     this.createdAt = new Date().toLocaleDateString();
 }
-function getData() {
-    const storedTodos = localStorage.getItem("todos");
-    return storedTodos ? JSON.parse(storedTodos) : [];
-}
-function setData(data) {
-    localStorage.setItem("todos", JSON.stringify(data));
-}
-function renderTodos() {
-    todoContainer.innerHTML = "";
-    inProgressContainer.innerHTML = "";
-    doneContainer.innerHTML = "";
-    data.forEach((todo)=>{
-        const todoElement = buildTodoElement(todo);
-        appendTodoToContainer(todo, todoElement);
-    });
-    (0, _countersJs.updateCounters)(data);
-}
-function appendTodoToContainer(todo, todoElement) {
-    if (todo.status === "todo") todoContainer.append(todoElement);
-    else if (todo.status === "in-progress") inProgressContainer.append(todoElement);
-    else if (todo.status === "done") doneContainer.append(todoElement);
-}
 function changeTodoStatus(id, newStatus) {
     data = data.map((todo)=>{
         if (todo.id === id) todo.status = newStatus;
         return todo;
     });
-    setData(data);
-    renderTodos();
+    (0, _dataJs.setData)(data);
+    (0, _renderJs.renderTodos)();
 }
 // Build Todo
 function buildTodoElement(todo) {
@@ -772,12 +752,12 @@ function clearEditModalFields() {
     editTodoInputDescription.value = "";
 }
 // Initial Render
-renderTodos();
+(0, _renderJs.renderTodos)();
 // Clock
 setInterval((0, _clockJs.clock), 1000);
 (0, _clockJs.clock)();
 
-},{"./counters.js":"cAZor","./clock.js":"4sKTc","bootstrap":"h36JB"}],"cAZor":[function(require,module,exports) {
+},{"./counters.js":"cAZor","./clock.js":"4sKTc","bootstrap":"h36JB","./render.js":"6Nkx6","./data.js":"kq51T"}],"cAZor":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "updateCounters", ()=>updateCounters);
@@ -6475,6 +6455,39 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     defaultModifiers: defaultModifiers
 }); // eslint-disable-next-line import/no-unused-modules
 
-},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["aP7aF","8lRBv"], "8lRBv", "parcelRequire08b6")
+},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6Nkx6":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "renderTodos", ()=>renderTodos);
+function renderTodos() {
+    todoContainer.innerHTML = "";
+    inProgressContainer.innerHTML = "";
+    doneContainer.innerHTML = "";
+    data.forEach((todo)=>{
+        const todoElement = buildTodoElement(todo);
+        appendTodoToContainer(todo, todoElement);
+    });
+    updateCounters(data);
+}
+function appendTodoToContainer(todo, todoElement) {
+    if (todo.status === "todo") todoContainer.append(todoElement);
+    else if (todo.status === "in-progress") inProgressContainer.append(todoElement);
+    else if (todo.status === "done") doneContainer.append(todoElement);
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kq51T":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "getData", ()=>getData);
+parcelHelpers.export(exports, "setData", ()=>setData);
+function getData() {
+    const storedTodos = localStorage.getItem("todos");
+    return storedTodos ? JSON.parse(storedTodos) : [];
+}
+function setData(data) {
+    localStorage.setItem("todos", JSON.stringify(data));
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["aP7aF","8lRBv"], "8lRBv", "parcelRequire08b6")
 
 //# sourceMappingURL=index.59a40e7a.js.map
