@@ -15,24 +15,20 @@ const inProgressContainer = document.querySelector('.todo-placeholder.todo-in-pr
 const doneContainer = document.querySelector('.todo-placeholder.todo-done')
 
 // Variables Add Todo Modal
-const addTodoModalElement = document.getElementById('addTodoModal')
-const addTodoModal = new Modal(addTodoModalElement)
+const addTodoModal = new Modal(document.getElementById('addTodoModal'))
 const addTodoButton = document.querySelector('.add-todo')
 const saveTodoButton = document.querySelector('.save-todo')
 
 // Variables Edit Todo Modal
-const editTodoModalElement = document.getElementById('editTodoModal')
-const editTodoModal = new Modal(editTodoModalElement)
+const editTodoModal = new Modal(document.getElementById('editTodoModal'))
 const saveEditTodoButton = document.querySelector('.save-edit-todo')
 
 // Variables Delete Todo Modal
-const deleteTodoModalElement = document.getElementById('deleteTodoModal')
-const deleteTodoModal = new Modal(deleteTodoModalElement)
+const deleteTodoModal = new Modal(document.getElementById('deleteTodoModal'))
 const confirmDeleteTodoButton = document.querySelector('.confirm-delete-todo')
 
 // Variables Clear Completed Modal
-const clearCompletedModalElement = document.getElementById('clearCompletedModal')
-const clearCompletedModal = new Modal(clearCompletedModalElement)
+const clearCompletedModal = new Modal(document.getElementById('clearCompletedModal'))
 const clearCompletedButton = document.querySelector('.clear-completed')
 const confirmClearCompletedButton = document.querySelector('.confirm-clear-completed')
 
@@ -58,9 +54,13 @@ function handleClearCompletedButtonClick() {
 }
 
 function handleOpenEditModal(todo) {
-    currentEditId = todo.id
-    populateEditModalFields(todo)
-    editTodoModal.show()
+    currentEditId = todo.id 
+
+    const form = document.getElementById('editTodoForm')
+    form.elements['title'].value = todo.title  
+    form.elements['description'].value = todo.description
+
+    editTodoModal.show()  
 }
 
 function handleOpenDeleteModal(todoId) {
@@ -130,43 +130,11 @@ function handleConfirmClearCompleted() {
 
 // Functions
 
-function renderTodos() {
-    clearTodoContainers()
-
-    data.forEach(todo => {
-        const todoElement = buildTodoElement(todo)
-        
-        if (todo.status === 'todo') {
-            todoContainer.append(todoElement)
-        } else if (todo.status === 'in-progress') {
-            inProgressContainer.append(todoElement)
-        } else if (todo.status === 'done') {
-            doneContainer.append(todoElement)
-        }
-    })
-
-    updateCounters(data)
-}
-
-function changeTodoStatus(id, newStatus) {
-    data = data.map(todo => {
-        if (todo.id === id) {
-            todo.status = newStatus
-        }
-        return todo
-    })
-
-    setData(data)
-    renderTodos()
-}
-
-// Build Todo
 function buildTodoElement(todo) {
     const div = document.createElement('div')
     div.classList.add('todo-item', todo.status)
     div.setAttribute('data-id', todo.id)
 
-    // Corrected template literal usage
     div.innerHTML = `
         <div class="actions">
             <button class="btn btn-sm btn-info edit-btn">Edit</button>
@@ -202,18 +170,38 @@ function buildTodoElement(todo) {
     return div
 }
 
-// Helper functions 
-function populateEditModalFields(todo) {
-    const form = document.getElementById('editTodoForm')
-    form.elements['title'].value = todo.title
-    form.elements['description'].value = todo.description
-}
-
-function clearTodoContainers() {
+function renderTodos() {
     todoContainer.innerHTML = ''
     inProgressContainer.innerHTML = ''
     doneContainer.innerHTML = ''
+
+    data.forEach(todo => {
+        const todoElement = buildTodoElement(todo)
+
+        if (todo.status === 'todo') {
+            todoContainer.append(todoElement)
+        } else if (todo.status === 'in-progress') {
+            inProgressContainer.append(todoElement)
+        } else if (todo.status === 'done') {
+            doneContainer.append(todoElement)
+        }
+    })
+
+    updateCounters(data)
 }
+
+function changeTodoStatus(id, newStatus) {
+    data = data.map(todo => {
+        if (todo.id === id) {
+            todo.status = newStatus
+        }
+        return todo
+    })
+
+    setData(data)
+    renderTodos()
+}
+
 
 // Initial Render
 renderTodos()
