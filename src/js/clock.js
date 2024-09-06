@@ -9,3 +9,5 @@ export function clock() {
   clockElement.textContent = `${hours}:${minutes}:${seconds}`
 }
 
+setInterval(clock, 1000)
+clock()

@@ -1,7 +1,6 @@
 import { Modal } from 'bootstrap'
 import { clock } from './clock.js'
 import { updateCounters } from './counters.js'
-import { renderTodos, appendTodoToContainer } from './render.js'
 import { getData, setData } from './data.js'
 
 // Variables
@@ -40,19 +39,23 @@ const clearCompletedModal = new Modal(clearCompletedModalElement)
 const confirmClearCompletedButton = document.querySelector('.confirm-clear-completed')
 
 // Listeners
-addTodoButton.addEventListener('click', handleOpenModalForAdd)
+addTodoButton.addEventListener('click', handleAddTodoButtonClick)
+clearCompletedButton.addEventListener('click', handleClearCompletedButtonClick)
 saveTodoButton.addEventListener('click', handleSaveNewTodo)
 saveEditTodoButton.addEventListener('click', handleSaveEditTodo)
 confirmDeleteTodoButton.addEventListener('click', handleConfirmDeleteTodo)
-clearCompletedButton.addEventListener('click', handleClearCompletedButtonClick)
 confirmClearCompletedButton.addEventListener('click', handleConfirmClearCompleted)
 
 // Handlers
 
-function handleOpenModalForAdd() {
+function handleAddTodoButtonClick() {
     currentEditId = null 
     clearModalFields()
     addTodoModal.show()
+}
+
+function handleClearCompletedButtonClick() {
+    clearCompletedModal.show()
 }
 
 function handleOpenEditModal(todo) {
@@ -64,10 +67,6 @@ function handleOpenEditModal(todo) {
 function handleOpenDeleteModal(todoId) {
     currentDeleteId = todoId
     deleteTodoModal.show()
-}
-
-function handleClearCompletedButtonClick() {
-    clearCompletedModal.show()
 }
 
 function handleSaveNewTodo() {
@@ -138,7 +137,28 @@ function TodoItem(title, description) {
 }
 
 
+function renderTodos() {
+    todoContainer.innerHTML = ''
+    inProgressContainer.innerHTML = ''
+    doneContainer.innerHTML = ''
 
+    data.forEach(todo => {
+        const todoElement = buildTodoElement(todo)
+        appendTodoToContainer(todo, todoElement)
+    })
+
+    updateCounters(data)
+}
+
+function appendTodoToContainer(todo, todoElement) {
+    if (todo.status === 'todo') {
+        todoContainer.append(todoElement)
+    } else if (todo.status === 'in-progress') {
+        inProgressContainer.append(todoElement)
+    } else if (todo.status === 'done') {
+        doneContainer.append(todoElement)
+    }
+}
 
 function changeTodoStatus(id, newStatus) {
     data = data.map(todo => {
@@ -209,9 +229,7 @@ function clearEditModalFields() {
     editTodoInputDescription.value = ''
 }
 
+
 // Initial Render
 renderTodos()
 
-// Clock
-setInterval(clock, 1000)
-clock()

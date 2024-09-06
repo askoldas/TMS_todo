@@ -587,7 +587,6 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var _bootstrap = require("bootstrap");
 var _clockJs = require("./clock.js");
 var _countersJs = require("./counters.js");
-var _renderJs = require("./render.js");
 var _dataJs = require("./data.js");
 // Variables
 let data = (0, _dataJs.getData)();
@@ -619,17 +618,20 @@ const clearCompletedModalElement = document.getElementById("clearCompletedModal"
 const clearCompletedModal = new (0, _bootstrap.Modal)(clearCompletedModalElement);
 const confirmClearCompletedButton = document.querySelector(".confirm-clear-completed");
 // Listeners
-addTodoButton.addEventListener("click", handleOpenModalForAdd);
+addTodoButton.addEventListener("click", handleAddTodoButtonClick);
+clearCompletedButton.addEventListener("click", handleClearCompletedButtonClick);
 saveTodoButton.addEventListener("click", handleSaveNewTodo);
 saveEditTodoButton.addEventListener("click", handleSaveEditTodo);
 confirmDeleteTodoButton.addEventListener("click", handleConfirmDeleteTodo);
-clearCompletedButton.addEventListener("click", handleClearCompletedButtonClick);
 confirmClearCompletedButton.addEventListener("click", handleConfirmClearCompleted);
 // Handlers
-function handleOpenModalForAdd() {
+function handleAddTodoButtonClick() {
     currentEditId = null;
     clearModalFields();
     addTodoModal.show();
+}
+function handleClearCompletedButtonClick() {
+    clearCompletedModal.show();
 }
 function handleOpenEditModal(todo) {
     currentEditId = todo.id;
@@ -640,9 +642,6 @@ function handleOpenDeleteModal(todoId) {
     currentDeleteId = todoId;
     deleteTodoModal.show();
 }
-function handleClearCompletedButtonClick() {
-    clearCompletedModal.show();
-}
 function handleSaveNewTodo() {
     const title = todoInputTitle.value.trim();
     const description = todoInputDescription.value.trim();
@@ -650,7 +649,7 @@ function handleSaveNewTodo() {
         const newTodo = new TodoItem(title, description);
         data.push(newTodo);
         (0, _dataJs.setData)(data);
-        (0, _renderJs.renderTodos)();
+        renderTodos();
         todoInputTitle.value = "";
         todoInputDescription.value = "";
         addTodoModal.hide();
@@ -669,7 +668,7 @@ function handleSaveEditTodo() {
             return todo;
         });
         (0, _dataJs.setData)(data);
-        (0, _renderJs.renderTodos)();
+        renderTodos();
         clearEditModalFields();
         editTodoModal.hide();
     } else alert("Please fill in both the title and description!");
@@ -677,13 +676,13 @@ function handleSaveEditTodo() {
 function handleConfirmDeleteTodo() {
     data = data.filter((todo)=>todo.id !== currentDeleteId);
     (0, _dataJs.setData)(data);
-    (0, _renderJs.renderTodos)();
+    renderTodos();
     deleteTodoModal.hide();
 }
 function handleConfirmClearCompleted() {
     data = data.filter((todo)=>todo.status !== "done");
     (0, _dataJs.setData)(data);
-    (0, _renderJs.renderTodos)();
+    renderTodos();
     clearCompletedModal.hide();
 }
 // Functions
@@ -694,13 +693,28 @@ function TodoItem(title, description) {
     this.status = "todo";
     this.createdAt = new Date().toLocaleDateString();
 }
+function renderTodos() {
+    todoContainer.innerHTML = "";
+    inProgressContainer.innerHTML = "";
+    doneContainer.innerHTML = "";
+    data.forEach((todo)=>{
+        const todoElement = buildTodoElement(todo);
+        appendTodoToContainer(todo, todoElement);
+    });
+    (0, _countersJs.updateCounters)(data);
+}
+function appendTodoToContainer(todo, todoElement) {
+    if (todo.status === "todo") todoContainer.append(todoElement);
+    else if (todo.status === "in-progress") inProgressContainer.append(todoElement);
+    else if (todo.status === "done") doneContainer.append(todoElement);
+}
 function changeTodoStatus(id, newStatus) {
     data = data.map((todo)=>{
         if (todo.id === id) todo.status = newStatus;
         return todo;
     });
     (0, _dataJs.setData)(data);
-    (0, _renderJs.renderTodos)();
+    renderTodos();
 }
 // Build Todo
 function buildTodoElement(todo) {
@@ -752,12 +766,9 @@ function clearEditModalFields() {
     editTodoInputDescription.value = "";
 }
 // Initial Render
-(0, _renderJs.renderTodos)();
-// Clock
-setInterval((0, _clockJs.clock), 1000);
-(0, _clockJs.clock)();
+renderTodos();
 
-},{"./counters.js":"cAZor","./clock.js":"4sKTc","bootstrap":"h36JB","./render.js":"6Nkx6","./data.js":"kq51T"}],"cAZor":[function(require,module,exports) {
+},{"./counters.js":"cAZor","./clock.js":"4sKTc","bootstrap":"h36JB","./data.js":"kq51T"}],"cAZor":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "updateCounters", ()=>updateCounters);
@@ -813,6 +824,8 @@ function clock() {
     const seconds = String(now.getSeconds()).padStart(2, "0");
     clockElement.textContent = `${hours}:${minutes}:${seconds}`;
 }
+setInterval(clock, 1000);
+clock();
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h36JB":[function(require,module,exports) {
 /*!
@@ -6455,27 +6468,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     defaultModifiers: defaultModifiers
 }); // eslint-disable-next-line import/no-unused-modules
 
-},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6Nkx6":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "renderTodos", ()=>renderTodos);
-function renderTodos() {
-    todoContainer.innerHTML = "";
-    inProgressContainer.innerHTML = "";
-    doneContainer.innerHTML = "";
-    data.forEach((todo)=>{
-        const todoElement = buildTodoElement(todo);
-        appendTodoToContainer(todo, todoElement);
-    });
-    updateCounters(data);
-}
-function appendTodoToContainer(todo, todoElement) {
-    if (todo.status === "todo") todoContainer.append(todoElement);
-    else if (todo.status === "in-progress") inProgressContainer.append(todoElement);
-    else if (todo.status === "done") doneContainer.append(todoElement);
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kq51T":[function(require,module,exports) {
+},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kq51T":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getData", ()=>getData);
