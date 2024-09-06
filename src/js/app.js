@@ -1,6 +1,8 @@
 import { Modal } from 'bootstrap'
 import { clock } from './clock.js'
 import { updateCounters } from './counters.js'
+import { renderTodos, appendTodoToContainer } from './render.js'
+import { getData, setData } from './data.js'
 
 // Variables
 let data = getData()
@@ -135,37 +137,8 @@ function TodoItem(title, description) {
     this.createdAt = new Date().toLocaleDateString()
 }
 
-function getData() {
-    const storedTodos = localStorage.getItem('todos')
-    return storedTodos ? JSON.parse(storedTodos) : []
-}
 
-function setData(data) {
-    localStorage.setItem('todos', JSON.stringify(data))
-}
 
-function renderTodos() {
-    todoContainer.innerHTML = ''
-    inProgressContainer.innerHTML = ''
-    doneContainer.innerHTML = ''
-
-    data.forEach(todo => {
-        const todoElement = buildTodoElement(todo)
-        appendTodoToContainer(todo, todoElement)
-    })
-
-    updateCounters(data)
-}
-
-function appendTodoToContainer(todo, todoElement) {
-    if (todo.status === 'todo') {
-        todoContainer.append(todoElement)
-    } else if (todo.status === 'in-progress') {
-        inProgressContainer.append(todoElement)
-    } else if (todo.status === 'done') {
-        doneContainer.append(todoElement)
-    }
-}
 
 function changeTodoStatus(id, newStatus) {
     data = data.map(todo => {
