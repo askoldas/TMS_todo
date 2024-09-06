@@ -10,165 +10,133 @@ let data = getData()
 let currentEditId = null
 let currentDeleteId = null
 
-const todoContainer = document.querySelector('.todo-placeholder.todo-todo')
-const inProgressContainer = document.querySelector('.todo-placeholder.todo-in-progress')
-const doneContainer = document.querySelector('.todo-placeholder.todo-done')
-
-// Variables Add Todo Modal
-const addTodoModalElement = document.getElementById('addTodoModal')
-const addTodoModal = new Modal(addTodoModalElement)
-const addTodoButton = document.querySelector('.add-todo')
-const saveTodoButton = document.querySelector('.save-todo')
-
-// Variables Edit Todo Modal
-const editTodoModalElement = document.getElementById('editTodoModal')
-const editTodoModal = new Modal(editTodoModalElement)
-const saveEditTodoButton = document.querySelector('.save-edit-todo')
-
-// Variables Delete Todo Modal
-const deleteTodoModalElement = document.getElementById('deleteTodoModal')
-const deleteTodoModal = new Modal(deleteTodoModalElement)
-const confirmDeleteTodoButton = document.querySelector('.confirm-delete-todo')
-
-// Variables Clear Completed Modal
-const clearCompletedModalElement = document.getElementById('clearCompletedModal')
-const clearCompletedModal = new Modal(clearCompletedModalElement)
-const clearCompletedButton = document.querySelector('.clear-completed')
-const confirmClearCompletedButton = document.querySelector('.confirm-clear-completed')
-
-// Listeners
-
-addTodoButton.addEventListener('click', handleAddTodoButtonClick)
-clearCompletedButton.addEventListener('click', handleClearCompletedButtonClick)
-saveTodoButton.addEventListener('click', handleSaveNewTodo)
-saveEditTodoButton.addEventListener('click', handleSaveEditTodo)
-confirmDeleteTodoButton.addEventListener('click', handleConfirmDeleteTodo)
-confirmClearCompletedButton.addEventListener('click', handleConfirmClearCompleted)
+// Add Event Listeners directly to the buttons
+document.querySelector('.add-todo').addEventListener('click', handleAddTodoButtonClick);
+document.querySelector('.save-todo').addEventListener('click', handleSaveNewTodo);
+document.querySelector('.confirm-delete-todo').addEventListener('click', handleConfirmDeleteTodo);
+document.querySelector('.clear-completed').addEventListener('click', handleClearCompletedButtonClick);
+document.querySelector('.confirm-clear-completed').addEventListener('click', handleConfirmClearCompleted);
 
 // Handlers
 
 function handleAddTodoButtonClick() {
-    currentEditId = null 
-    document.getElementById('addTodoForm').reset()
-    addTodoModal.show()
+    currentEditId = null;
+    document.getElementById('addTodoForm').reset();
+    new Modal(document.getElementById('addTodoModal')).show();
 }
 
 function handleClearCompletedButtonClick() {
-    clearCompletedModal.show()
+    new Modal(document.getElementById('clearCompletedModal')).show();
 }
 
 function handleOpenEditModal(todo) {
-    currentEditId = todo.id
-    populateEditModalFields(todo)
-    editTodoModal.show()
+    currentEditId = todo.id;
+    populateEditModalFields(todo);
+    new Modal(document.getElementById('editTodoModal')).show();
 }
 
 function handleOpenDeleteModal(todoId) {
-    currentDeleteId = todoId
-    deleteTodoModal.show()
+    currentDeleteId = todoId;
+    new Modal(document.getElementById('deleteTodoModal')).show();
 }
 
 function handleSaveNewTodo() {
-    const form = document.getElementById('addTodoForm')
-    const formData = new FormData(form)
-    const title = formData.get('title')
-    const description = formData.get('description')
+    const form = document.getElementById('addTodoForm');
+    const formData = new FormData(form);
+    const title = formData.get('title');
+    const description = formData.get('description');
 
     if (title && description) {
-        const newTodo = new TodoItem(title, description)
-        data.push(newTodo)
-        setData(data)
-        renderTodos()
+        const newTodo = new TodoItem(title, description);
+        data.push(newTodo);
+        setData(data);
+        renderTodos();
 
-        form.reset() 
-        addTodoModal.hide()
+        form.reset();
+        new Modal(document.getElementById('addTodoModal')).hide();
 
-        updateCounters(data)
+        updateCounters(data);
     } else {
-        alert('Please fill in both the title and description!')
+        alert('Please fill in both the title and description!');
     }
 }
 
 function handleSaveEditTodo() {
-    const form = document.getElementById('editTodoForm')
-    const formData = new FormData(form)
-    const title = formData.get('title')
-    const description = formData.get('description')
+    const form = document.getElementById('editTodoForm');
+    const formData = new FormData(form);
+    const title = formData.get('title');
+    const description = formData.get('description');
 
     if (title && description) {
         data = data.map(todo => {
             if (todo.id === currentEditId) {
-                todo.title = title
-                todo.description = description
+                todo.title = title;
+                todo.description = description;
             }
-            return todo
-        })
+            return todo;
+        });
 
-        setData(data)
-        renderTodos()
+        setData(data);
+        renderTodos();
 
-        form.reset() 
-        editTodoModal.hide()
+        form.reset();
+        new Modal(document.getElementById('editTodoModal')).hide();
     } else {
-        alert('Please fill in both the title and description!')
+        alert('Please fill in both the title and description!');
     }
 }
 
 function handleConfirmDeleteTodo() {
-    data = data.filter(todo => todo.id !== currentDeleteId)
-    setData(data)
-    renderTodos()
-    deleteTodoModal.hide()
+    data = data.filter(todo => todo.id !== currentDeleteId);
+    setData(data);
+    renderTodos();
+    new Modal(document.getElementById('deleteTodoModal')).hide();
 }
 
 function handleConfirmClearCompleted() {
-    data = data.filter(todo => todo.status !== 'done')
-    setData(data)
-    renderTodos()
-    clearCompletedModal.hide()
+    data = data.filter(todo => todo.status !== 'done');
+    setData(data);
+    renderTodos();
+    new Modal(document.getElementById('clearCompletedModal')).hide();
 }
 
 // Functions
 
-
-
 function renderTodos() {
-
-    clearTodoContainers()
+    clearTodoContainers();
 
     data.forEach(todo => {
-        const todoElement = buildTodoElement(todo)
-        
+        const todoElement = buildTodoElement(todo);
+
         if (todo.status === 'todo') {
-            todoContainer.append(todoElement)
+            document.querySelector('.todo-placeholder.todo-todo').append(todoElement);
         } else if (todo.status === 'in-progress') {
-            inProgressContainer.append(todoElement)
+            document.querySelector('.todo-placeholder.todo-in-progress').append(todoElement);
         } else if (todo.status === 'done') {
-            doneContainer.append(todoElement)
+            document.querySelector('.todo-placeholder.todo-done').append(todoElement);
         }
-    })
+    });
 
-    updateCounters(data)
+    updateCounters(data);
 }
-
 
 function changeTodoStatus(id, newStatus) {
     data = data.map(todo => {
         if (todo.id === id) {
-            todo.status = newStatus
+            todo.status = newStatus;
         }
-        return todo
-    })
+        return todo;
+    });
 
-    setData(data)
-    renderTodos()
+    setData(data);
+    renderTodos();
 }
 
 // Build Todo
 function buildTodoElement(todo) {
-    const div = document.createElement('div')
-    div.classList.add('todo-item', todo.status)
-    div.setAttribute('data-id', todo.id)
+    const div = document.createElement('div');
+    div.classList.add('todo-item', todo.status);
+    div.setAttribute('data-id', todo.id);
 
     div.innerHTML = `
         <div class="actions">
@@ -189,34 +157,34 @@ function buildTodoElement(todo) {
             </label>
         </div>
         <span class="todo-date">${todo.createdAt}</span>
-    `
+    `;
 
-    div.querySelector('.edit-btn').addEventListener('click', () => handleOpenEditModal(todo))
-    div.querySelector('.delete-btn').addEventListener('click', () => handleOpenDeleteModal(todo.id))
+    div.querySelector('.edit-btn').addEventListener('click', () => handleOpenEditModal(todo));
+    div.querySelector('.delete-btn').addEventListener('click', () => handleOpenDeleteModal(todo.id));
 
-    const radioButtons = div.querySelectorAll('input[type="radio"]')
+    const radioButtons = div.querySelectorAll('input[type="radio"]');
     radioButtons.forEach(radio => {
         radio.addEventListener('change', function () {
-            const newStatus = this.value
-            changeTodoStatus(todo.id, newStatus)
-        })
-    })
+            const newStatus = this.value;
+            changeTodoStatus(todo.id, newStatus);
+        });
+    });
 
-    return div
+    return div;
 }
 
 // Helper functions 
 function populateEditModalFields(todo) {
-    const form = document.getElementById('editTodoForm')
-    form.elements['title'].value = todo.title
-    form.elements['description'].value = todo.description
+    const form = document.getElementById('editTodoForm');
+    form.elements['title'].value = todo.title;
+    form.elements['description'].value = todo.description;
 }
 
 function clearTodoContainers() {
-    todoContainer.innerHTML = ''
-    inProgressContainer.innerHTML = ''
-    doneContainer.innerHTML = ''
+    document.querySelector('.todo-placeholder.todo-todo').innerHTML = '';
+    document.querySelector('.todo-placeholder.todo-in-progress').innerHTML = '';
+    document.querySelector('.todo-placeholder.todo-done').innerHTML = '';
 }
 
 // Initial Render
-renderTodos()
+renderTodos();
