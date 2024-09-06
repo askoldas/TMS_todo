@@ -590,32 +590,32 @@ var _countersJs = require("./counters.js");
 var _dataJs = require("./data.js");
 // Variables
 let data = (0, _dataJs.getData)();
-const addTodoButton = document.querySelector(".add-todo");
-const saveTodoButton = document.querySelector(".save-todo");
-const todoInputTitle = document.getElementById("todo-title");
-const todoInputDescription = document.getElementById("todo-description");
+let currentEditId = null;
+let currentDeleteId = null;
 const todoContainer = document.querySelector(".todo-placeholder.todo-todo");
 const inProgressContainer = document.querySelector(".todo-placeholder.todo-in-progress");
 const doneContainer = document.querySelector(".todo-placeholder.todo-done");
+// Variables Add Todo Modal
 const addTodoModalElement = document.getElementById("addTodoModal");
 const addTodoModal = new (0, _bootstrap.Modal)(addTodoModalElement);
-// Variables for Edit Modal
+const addTodoButton = document.querySelector(".add-todo");
+const todoInputTitle = document.getElementById("todo-title");
+const todoInputDescription = document.getElementById("todo-description");
+const saveTodoButton = document.querySelector(".save-todo");
+// Variables Edit Todo Modal
 const editTodoModalElement = document.getElementById("editTodoModal");
 const editTodoModal = new (0, _bootstrap.Modal)(editTodoModalElement);
 const editTodoInputTitle = document.getElementById("edit-todo-title");
 const editTodoInputDescription = document.getElementById("edit-todo-description");
 const saveEditTodoButton = document.querySelector(".save-edit-todo");
-// Variables for Delete Modal
+// Variables Delete Todo Modal
 const deleteTodoModalElement = document.getElementById("deleteTodoModal");
 const deleteTodoModal = new (0, _bootstrap.Modal)(deleteTodoModalElement);
 const confirmDeleteTodoButton = document.querySelector(".confirm-delete-todo");
-// Variable to track the ID of the todo
-let currentEditId = null;
-let currentDeleteId = null;
-// Clear Completed
-const clearCompletedButton = document.querySelector(".clear-completed");
+// Variables Clear Completed Modal
 const clearCompletedModalElement = document.getElementById("clearCompletedModal");
 const clearCompletedModal = new (0, _bootstrap.Modal)(clearCompletedModalElement);
+const clearCompletedButton = document.querySelector(".clear-completed");
 const confirmClearCompletedButton = document.querySelector(".confirm-clear-completed");
 // Listeners
 addTodoButton.addEventListener("click", handleAddTodoButtonClick);
@@ -643,22 +643,21 @@ function handleOpenDeleteModal(todoId) {
     deleteTodoModal.show();
 }
 function handleSaveNewTodo() {
-    const title = todoInputTitle.value.trim();
-    const description = todoInputDescription.value.trim();
+    const title = todoInputTitle.value;
+    const description = todoInputDescription.value;
     if (title && description) {
         const newTodo = new TodoItem(title, description);
         data.push(newTodo);
         (0, _dataJs.setData)(data);
         renderTodos();
-        todoInputTitle.value = "";
-        todoInputDescription.value = "";
+        clearModalFields();
         addTodoModal.hide();
         (0, _countersJs.updateCounters)(data);
     } else alert("Please fill in both the title and description!");
 }
 function handleSaveEditTodo() {
-    const title = editTodoInputTitle.value.trim();
-    const description = editTodoInputDescription.value.trim();
+    const title = editTodoInputTitle.value;
+    const description = editTodoInputDescription.value;
     if (title && description) {
         data = data.map((todo)=>{
             if (todo.id === currentEditId) {

@@ -4,47 +4,53 @@ import { updateCounters } from './counters.js'
 import { getData, setData } from './data.js'
 
 // Variables
+
 let data = getData()
-const addTodoButton = document.querySelector('.add-todo')
-const saveTodoButton = document.querySelector('.save-todo')
-const todoInputTitle = document.getElementById('todo-title')
-const todoInputDescription = document.getElementById('todo-description')
+let currentEditId = null
+let currentDeleteId = null
+
 const todoContainer = document.querySelector('.todo-placeholder.todo-todo')
 const inProgressContainer = document.querySelector('.todo-placeholder.todo-in-progress')
 const doneContainer = document.querySelector('.todo-placeholder.todo-done')
 
+// Variables Add Todo Modal
 const addTodoModalElement = document.getElementById('addTodoModal')
 const addTodoModal = new Modal(addTodoModalElement)
+const addTodoButton = document.querySelector('.add-todo')
+const todoInputTitle = document.getElementById('todo-title')
+const todoInputDescription = document.getElementById('todo-description')
+const saveTodoButton = document.querySelector('.save-todo')
 
-// Variables for Edit Modal
+// Variables Edit Todo Modal
 const editTodoModalElement = document.getElementById('editTodoModal')
 const editTodoModal = new Modal(editTodoModalElement)
 const editTodoInputTitle = document.getElementById('edit-todo-title')
 const editTodoInputDescription = document.getElementById('edit-todo-description')
 const saveEditTodoButton = document.querySelector('.save-edit-todo')
 
-// Variables for Delete Modal
+// Variables Delete Todo Modal
 const deleteTodoModalElement = document.getElementById('deleteTodoModal')
 const deleteTodoModal = new Modal(deleteTodoModalElement)
 const confirmDeleteTodoButton = document.querySelector('.confirm-delete-todo')
 
-// Variable to track the ID of the todo
-let currentEditId = null
-let currentDeleteId = null
-
-// Clear Completed
-const clearCompletedButton = document.querySelector('.clear-completed')
+// Variables Clear Completed Modal
 const clearCompletedModalElement = document.getElementById('clearCompletedModal')
 const clearCompletedModal = new Modal(clearCompletedModalElement)
+const clearCompletedButton = document.querySelector('.clear-completed')
 const confirmClearCompletedButton = document.querySelector('.confirm-clear-completed')
 
+
+
 // Listeners
+
 addTodoButton.addEventListener('click', handleAddTodoButtonClick)
 clearCompletedButton.addEventListener('click', handleClearCompletedButtonClick)
 saveTodoButton.addEventListener('click', handleSaveNewTodo)
 saveEditTodoButton.addEventListener('click', handleSaveEditTodo)
 confirmDeleteTodoButton.addEventListener('click', handleConfirmDeleteTodo)
 confirmClearCompletedButton.addEventListener('click', handleConfirmClearCompleted)
+
+
 
 // Handlers
 
@@ -70,8 +76,8 @@ function handleOpenDeleteModal(todoId) {
 }
 
 function handleSaveNewTodo() {
-    const title = todoInputTitle.value.trim()
-    const description = todoInputDescription.value.trim()
+    const title = todoInputTitle.value
+    const description = todoInputDescription.value
 
     if (title && description) {
         const newTodo = new TodoItem(title, description)
@@ -79,8 +85,7 @@ function handleSaveNewTodo() {
         setData(data)
         renderTodos()
 
-        todoInputTitle.value = ''
-        todoInputDescription.value = ''
+        clearModalFields()
         addTodoModal.hide()
 
         updateCounters(data)
@@ -90,8 +95,8 @@ function handleSaveNewTodo() {
 }
 
 function handleSaveEditTodo() {
-    const title = editTodoInputTitle.value.trim()
-    const description = editTodoInputDescription.value.trim()
+    const title = editTodoInputTitle.value
+    const description = editTodoInputDescription.value
 
     if (title && description) {
         data = data.map(todo => {
