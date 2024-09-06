@@ -593,29 +593,51 @@ var _constructorsJs = require("./constructors.js");
 let data = (0, _dataJs.getData)();
 let currentEditId = null;
 let currentDeleteId = null;
-// Add Event Listeners directly to the buttons
-document.querySelector(".add-todo").addEventListener("click", handleAddTodoButtonClick);
-document.querySelector(".save-todo").addEventListener("click", handleSaveNewTodo);
-document.querySelector(".confirm-delete-todo").addEventListener("click", handleConfirmDeleteTodo);
-document.querySelector(".clear-completed").addEventListener("click", handleClearCompletedButtonClick);
-document.querySelector(".confirm-clear-completed").addEventListener("click", handleConfirmClearCompleted);
+const todoContainer = document.querySelector(".todo-placeholder.todo-todo");
+const inProgressContainer = document.querySelector(".todo-placeholder.todo-in-progress");
+const doneContainer = document.querySelector(".todo-placeholder.todo-done");
+// Variables Add Todo Modal
+const addTodoModalElement = document.getElementById("addTodoModal");
+const addTodoModal = new (0, _bootstrap.Modal)(addTodoModalElement);
+const addTodoButton = document.querySelector(".add-todo");
+const saveTodoButton = document.querySelector(".save-todo");
+// Variables Edit Todo Modal
+const editTodoModalElement = document.getElementById("editTodoModal");
+const editTodoModal = new (0, _bootstrap.Modal)(editTodoModalElement);
+const saveEditTodoButton = document.querySelector(".save-edit-todo");
+// Variables Delete Todo Modal
+const deleteTodoModalElement = document.getElementById("deleteTodoModal");
+const deleteTodoModal = new (0, _bootstrap.Modal)(deleteTodoModalElement);
+const confirmDeleteTodoButton = document.querySelector(".confirm-delete-todo");
+// Variables Clear Completed Modal
+const clearCompletedModalElement = document.getElementById("clearCompletedModal");
+const clearCompletedModal = new (0, _bootstrap.Modal)(clearCompletedModalElement);
+const clearCompletedButton = document.querySelector(".clear-completed");
+const confirmClearCompletedButton = document.querySelector(".confirm-clear-completed");
+// Listeners
+addTodoButton.addEventListener("click", handleAddTodoButtonClick);
+clearCompletedButton.addEventListener("click", handleClearCompletedButtonClick);
+saveTodoButton.addEventListener("click", handleSaveNewTodo);
+saveEditTodoButton.addEventListener("click", handleSaveEditTodo);
+confirmDeleteTodoButton.addEventListener("click", handleConfirmDeleteTodo);
+confirmClearCompletedButton.addEventListener("click", handleConfirmClearCompleted);
 // Handlers
 function handleAddTodoButtonClick() {
     currentEditId = null;
     document.getElementById("addTodoForm").reset();
-    new (0, _bootstrap.Modal)(document.getElementById("addTodoModal")).show();
+    addTodoModal.show();
 }
 function handleClearCompletedButtonClick() {
-    new (0, _bootstrap.Modal)(document.getElementById("clearCompletedModal")).show();
+    clearCompletedModal.show();
 }
 function handleOpenEditModal(todo) {
     currentEditId = todo.id;
     populateEditModalFields(todo);
-    new (0, _bootstrap.Modal)(document.getElementById("editTodoModal")).show();
+    editTodoModal.show();
 }
 function handleOpenDeleteModal(todoId) {
     currentDeleteId = todoId;
-    new (0, _bootstrap.Modal)(document.getElementById("deleteTodoModal")).show();
+    deleteTodoModal.show();
 }
 function handleSaveNewTodo() {
     const form = document.getElementById("addTodoForm");
@@ -628,7 +650,7 @@ function handleSaveNewTodo() {
         (0, _dataJs.setData)(data);
         renderTodos();
         form.reset();
-        new (0, _bootstrap.Modal)(document.getElementById("addTodoModal")).hide();
+        addTodoModal.hide();
         (0, _countersJs.updateCounters)(data);
     } else alert("Please fill in both the title and description!");
 }
@@ -648,29 +670,29 @@ function handleSaveEditTodo() {
         (0, _dataJs.setData)(data);
         renderTodos();
         form.reset();
-        new (0, _bootstrap.Modal)(document.getElementById("editTodoModal")).hide();
+        editTodoModal.hide();
     } else alert("Please fill in both the title and description!");
 }
 function handleConfirmDeleteTodo() {
     data = data.filter((todo)=>todo.id !== currentDeleteId);
     (0, _dataJs.setData)(data);
     renderTodos();
-    new (0, _bootstrap.Modal)(document.getElementById("deleteTodoModal")).hide();
+    deleteTodoModal.hide();
 }
 function handleConfirmClearCompleted() {
     data = data.filter((todo)=>todo.status !== "done");
     (0, _dataJs.setData)(data);
     renderTodos();
-    new (0, _bootstrap.Modal)(document.getElementById("clearCompletedModal")).hide();
+    clearCompletedModal.hide();
 }
 // Functions
 function renderTodos() {
     clearTodoContainers();
     data.forEach((todo)=>{
         const todoElement = buildTodoElement(todo);
-        if (todo.status === "todo") document.querySelector(".todo-placeholder.todo-todo").append(todoElement);
-        else if (todo.status === "in-progress") document.querySelector(".todo-placeholder.todo-in-progress").append(todoElement);
-        else if (todo.status === "done") document.querySelector(".todo-placeholder.todo-done").append(todoElement);
+        if (todo.status === "todo") todoContainer.append(todoElement);
+        else if (todo.status === "in-progress") inProgressContainer.append(todoElement);
+        else if (todo.status === "done") doneContainer.append(todoElement);
     });
     (0, _countersJs.updateCounters)(data);
 }
@@ -687,6 +709,7 @@ function buildTodoElement(todo) {
     const div = document.createElement("div");
     div.classList.add("todo-item", todo.status);
     div.setAttribute("data-id", todo.id);
+    // Corrected template literal usage
     div.innerHTML = `
         <div class="actions">
             <button class="btn btn-sm btn-info edit-btn">Edit</button>
@@ -725,73 +748,14 @@ function populateEditModalFields(todo) {
     form.elements["description"].value = todo.description;
 }
 function clearTodoContainers() {
-    document.querySelector(".todo-placeholder.todo-todo").innerHTML = "";
-    document.querySelector(".todo-placeholder.todo-in-progress").innerHTML = "";
-    document.querySelector(".todo-placeholder.todo-done").innerHTML = "";
+    todoContainer.innerHTML = "";
+    inProgressContainer.innerHTML = "";
+    doneContainer.innerHTML = "";
 }
 // Initial Render
 renderTodos();
 
-},{"./counters.js":"cAZor","./clock.js":"4sKTc","bootstrap":"h36JB","./data.js":"kq51T","./constructors.js":"6rewt"}],"cAZor":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "updateCounters", ()=>updateCounters);
-function updateCounters(todos) {
-    const todoCount = todos.filter((todo)=>todo.status === "todo").length;
-    const inProgressCount = todos.filter((todo)=>todo.status === "in-progress").length;
-    const doneCount = todos.filter((todo)=>todo.status === "done").length;
-    document.querySelector(".todo-counter").textContent = todoCount;
-    document.querySelector(".in-progress-counter").textContent = inProgressCount;
-    document.querySelector(".done-counter").textContent = doneCount;
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"4sKTc":[function(require,module,exports) {
-// CLOCK
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "clock", ()=>clock);
-const clockElement = document.getElementById("clock");
-function clock() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-    clockElement.textContent = `${hours}:${minutes}:${seconds}`;
-}
-setInterval(clock, 1000);
-clock();
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h36JB":[function(require,module,exports) {
+},{"bootstrap":"h36JB","./clock.js":"4sKTc","./counters.js":"cAZor","./data.js":"kq51T","./constructors.js":"6rewt"}],"h36JB":[function(require,module,exports) {
 /*!
   * Bootstrap v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -4509,7 +4473,37 @@ var modifierPhases = [
     afterWrite
 ];
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cap3W":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"cap3W":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "applyStyles", ()=>(0, _applyStylesJsDefault.default));
@@ -6432,7 +6426,36 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     defaultModifiers: defaultModifiers
 }); // eslint-disable-next-line import/no-unused-modules
 
-},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kq51T":[function(require,module,exports) {
+},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4sKTc":[function(require,module,exports) {
+// CLOCK
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "clock", ()=>clock);
+const clockElement = document.getElementById("clock");
+function clock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+}
+setInterval(clock, 1000);
+clock();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cAZor":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "updateCounters", ()=>updateCounters);
+function updateCounters(todos) {
+    const todoCount = todos.filter((todo)=>todo.status === "todo").length;
+    const inProgressCount = todos.filter((todo)=>todo.status === "in-progress").length;
+    const doneCount = todos.filter((todo)=>todo.status === "done").length;
+    document.querySelector(".todo-counter").textContent = todoCount;
+    document.querySelector(".in-progress-counter").textContent = inProgressCount;
+    document.querySelector(".done-counter").textContent = doneCount;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kq51T":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getData", ()=>getData);
