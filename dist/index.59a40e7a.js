@@ -588,6 +588,7 @@ var _bootstrap = require("bootstrap");
 var _clockJs = require("./clock.js");
 var _countersJs = require("./counters.js");
 var _dataJs = require("./data.js");
+var _constructorsJs = require("./constructors.js");
 // Variables
 let data = (0, _dataJs.getData)();
 let currentEditId = null;
@@ -623,7 +624,7 @@ confirmClearCompletedButton.addEventListener("click", handleConfirmClearComplete
 // Handlers
 function handleAddTodoButtonClick() {
     currentEditId = null;
-    clearModalFields();
+    document.getElementById("addTodoForm").reset();
     addTodoModal.show();
 }
 function handleClearCompletedButtonClick() {
@@ -644,7 +645,7 @@ function handleSaveNewTodo() {
     const title = formData.get("title");
     const description = formData.get("description");
     if (title && description) {
-        const newTodo = new TodoItem(title, description);
+        const newTodo = new (0, _constructorsJs.TodoItem)(title, description);
         data.push(newTodo);
         (0, _dataJs.setData)(data);
         renderTodos();
@@ -685,13 +686,6 @@ function handleConfirmClearCompleted() {
     clearCompletedModal.hide();
 }
 // Functions
-function TodoItem(title, description) {
-    this.id = crypto.randomUUID();
-    this.title = title;
-    this.description = description;
-    this.status = "todo";
-    this.createdAt = new Date().toLocaleDateString();
-}
 function renderTodos() {
     clearTodoContainers();
     data.forEach((todo)=>{
@@ -752,9 +746,6 @@ function populateEditModalFields(todo) {
     form.elements["title"].value = todo.title;
     form.elements["description"].value = todo.description;
 }
-function clearModalFields() {
-    document.getElementById("addTodoForm").reset();
-}
 function clearTodoContainers() {
     todoContainer.innerHTML = "";
     inProgressContainer.innerHTML = "";
@@ -763,7 +754,7 @@ function clearTodoContainers() {
 // Initial Render
 renderTodos();
 
-},{"./counters.js":"cAZor","./clock.js":"4sKTc","bootstrap":"h36JB","./data.js":"kq51T"}],"cAZor":[function(require,module,exports) {
+},{"./counters.js":"cAZor","./clock.js":"4sKTc","bootstrap":"h36JB","./data.js":"kq51T","./constructors.js":"6rewt"}],"cAZor":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "updateCounters", ()=>updateCounters);
@@ -6474,6 +6465,18 @@ function getData() {
 }
 function setData(data) {
     localStorage.setItem("todos", JSON.stringify(data));
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6rewt":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "TodoItem", ()=>TodoItem);
+function TodoItem(title, description) {
+    this.id = crypto.randomUUID();
+    this.title = title;
+    this.description = description;
+    this.status = "todo";
+    this.createdAt = new Date().toLocaleDateString();
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["aP7aF","8lRBv"], "8lRBv", "parcelRequire08b6")

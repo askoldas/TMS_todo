@@ -2,6 +2,7 @@ import { Modal } from 'bootstrap'
 import { clock } from './clock.js'
 import { updateCounters } from './counters.js'
 import { getData, setData } from './data.js'
+import { TodoItem } from './constructors.js'
 
 // Variables
 
@@ -48,7 +49,7 @@ confirmClearCompletedButton.addEventListener('click', handleConfirmClearComplete
 
 function handleAddTodoButtonClick() {
     currentEditId = null 
-    clearModalFields()
+    document.getElementById('addTodoForm').reset()
     addTodoModal.show()
 }
 
@@ -129,13 +130,7 @@ function handleConfirmClearCompleted() {
 
 // Functions
 
-function TodoItem(title, description) {
-    this.id = crypto.randomUUID()
-    this.title = title
-    this.description = description
-    this.status = 'todo'
-    this.createdAt = new Date().toLocaleDateString()
-}
+
 
 function renderTodos() {
 
@@ -215,10 +210,6 @@ function populateEditModalFields(todo) {
     const form = document.getElementById('editTodoForm')
     form.elements['title'].value = todo.title
     form.elements['description'].value = todo.description
-}
-
-function clearModalFields() {
-    document.getElementById('addTodoForm').reset()
 }
 
 function clearTodoContainers() {
