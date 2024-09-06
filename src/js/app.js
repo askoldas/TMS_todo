@@ -17,15 +17,11 @@ const doneContainer = document.querySelector('.todo-placeholder.todo-done')
 const addTodoModalElement = document.getElementById('addTodoModal')
 const addTodoModal = new Modal(addTodoModalElement)
 const addTodoButton = document.querySelector('.add-todo')
-const todoInputTitle = document.getElementById('todo-title')
-const todoInputDescription = document.getElementById('todo-description')
 const saveTodoButton = document.querySelector('.save-todo')
 
 // Variables Edit Todo Modal
 const editTodoModalElement = document.getElementById('editTodoModal')
 const editTodoModal = new Modal(editTodoModalElement)
-const editTodoInputTitle = document.getElementById('edit-todo-title')
-const editTodoInputDescription = document.getElementById('edit-todo-description')
 const saveEditTodoButton = document.querySelector('.save-edit-todo')
 
 // Variables Delete Todo Modal
@@ -39,8 +35,6 @@ const clearCompletedModal = new Modal(clearCompletedModalElement)
 const clearCompletedButton = document.querySelector('.clear-completed')
 const confirmClearCompletedButton = document.querySelector('.confirm-clear-completed')
 
-
-
 // Listeners
 
 addTodoButton.addEventListener('click', handleAddTodoButtonClick)
@@ -49,8 +43,6 @@ saveTodoButton.addEventListener('click', handleSaveNewTodo)
 saveEditTodoButton.addEventListener('click', handleSaveEditTodo)
 confirmDeleteTodoButton.addEventListener('click', handleConfirmDeleteTodo)
 confirmClearCompletedButton.addEventListener('click', handleConfirmClearCompleted)
-
-
 
 // Handlers
 
@@ -76,8 +68,10 @@ function handleOpenDeleteModal(todoId) {
 }
 
 function handleSaveNewTodo() {
-    const title = todoInputTitle.value
-    const description = todoInputDescription.value
+    const form = document.getElementById('addTodoForm')
+    const formData = new FormData(form)
+    const title = formData.get('title')
+    const description = formData.get('description')
 
     if (title && description) {
         const newTodo = new TodoItem(title, description)
@@ -85,7 +79,7 @@ function handleSaveNewTodo() {
         setData(data)
         renderTodos()
 
-        clearModalFields()
+        form.reset() 
         addTodoModal.hide()
 
         updateCounters(data)
@@ -95,8 +89,10 @@ function handleSaveNewTodo() {
 }
 
 function handleSaveEditTodo() {
-    const title = editTodoInputTitle.value
-    const description = editTodoInputDescription.value
+    const form = document.getElementById('editTodoForm')
+    const formData = new FormData(form)
+    const title = formData.get('title')
+    const description = formData.get('description')
 
     if (title && description) {
         data = data.map(todo => {
@@ -110,7 +106,7 @@ function handleSaveEditTodo() {
         setData(data)
         renderTodos()
 
-        clearEditModalFields()
+        form.reset() 
         editTodoModal.hide()
     } else {
         alert('Please fill in both the title and description!')
@@ -141,29 +137,25 @@ function TodoItem(title, description) {
     this.createdAt = new Date().toLocaleDateString()
 }
 
-
 function renderTodos() {
-    todoContainer.innerHTML = ''
-    inProgressContainer.innerHTML = ''
-    doneContainer.innerHTML = ''
+
+    clearTodoContainers()
 
     data.forEach(todo => {
         const todoElement = buildTodoElement(todo)
-        appendTodoToContainer(todo, todoElement)
+        
+        if (todo.status === 'todo') {
+            todoContainer.append(todoElement)
+        } else if (todo.status === 'in-progress') {
+            inProgressContainer.append(todoElement)
+        } else if (todo.status === 'done') {
+            doneContainer.append(todoElement)
+        }
     })
 
     updateCounters(data)
 }
 
-function appendTodoToContainer(todo, todoElement) {
-    if (todo.status === 'todo') {
-        todoContainer.append(todoElement)
-    } else if (todo.status === 'in-progress') {
-        inProgressContainer.append(todoElement)
-    } else if (todo.status === 'done') {
-        doneContainer.append(todoElement)
-    }
-}
 
 function changeTodoStatus(id, newStatus) {
     data = data.map(todo => {
@@ -220,21 +212,20 @@ function buildTodoElement(todo) {
 
 // Helper functions 
 function populateEditModalFields(todo) {
-    editTodoInputTitle.value = todo.title
-    editTodoInputDescription.value = todo.description
+    const form = document.getElementById('editTodoForm')
+    form.elements['title'].value = todo.title
+    form.elements['description'].value = todo.description
 }
 
 function clearModalFields() {
-    todoInputTitle.value = ''
-    todoInputDescription.value = ''
+    document.getElementById('addTodoForm').reset()
 }
 
-function clearEditModalFields() {
-    editTodoInputTitle.value = ''
-    editTodoInputDescription.value = ''
+function clearTodoContainers() {
+    todoContainer.innerHTML = ''
+    inProgressContainer.innerHTML = ''
+    doneContainer.innerHTML = ''
 }
-
 
 // Initial Render
 renderTodos()
-
