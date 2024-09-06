@@ -687,7 +687,6 @@ function handleConfirmClearCompleted() {
 function buildTodoElement(todo) {
     const div = document.createElement("div");
     div.classList.add("todo-item", todo.status);
-    div.setAttribute("data-id", todo.id);
     div.innerHTML = `
         <div class="actions">
             <button class="btn btn-sm btn-info edit-btn">Edit</button>
